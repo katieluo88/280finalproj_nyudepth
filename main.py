@@ -26,8 +26,8 @@ best_result.set_to_worst()
 def create_data_loaders(args):
     # Data loading code
     print("=> creating data loaders ...")
-    traindir = os.path.join('data', args.data, 'train')
-    valdir = os.path.join('data', args.data, 'val')
+    traindir = os.path.join('/media/hd2/home/katie/data', args.data, 'train')
+    valdir = os.path.join('/media/hd2/home/katie/data', args.data, 'val')
     train_loader = None
     val_loader = None
 
@@ -40,12 +40,19 @@ def create_data_loaders(args):
         sparsifier = SimulatedStereo(num_samples=args.num_samples, max_depth=max_depth)
 
     if args.data == 'nyudepthv2':
-        from dataloaders.nyu_dataloader import NYUDataset
-        if not args.evaluate:
-            train_dataset = NYUDataset(traindir, type='train',
+        from dataloaders.nyu_dataloader import NYUDatasetPatches, NYUDataset
+        if args.patch:
+            if not args.evaluate:
+                train_dataset = NYUDatasetPatches(traindir, 'train',
+                                                  args.crop_size, modality=args.modality, sparsifier=sparsifier)
+            val_dataset = NYUDatasetPatches(valdir, 'val',
+                                     args.crop_size, modality=args.modality, sparsifier=sparsifier)
+        else:
+            if not args.evaluate:
+                train_dataset = NYUDataset(traindir, type='train',
+                                           modality=args.modality, sparsifier=sparsifier)
+            val_dataset = NYUDataset(valdir, type='val',
                 modality=args.modality, sparsifier=sparsifier)
-        val_dataset = NYUDataset(valdir, type='val',
-            modality=args.modality, sparsifier=sparsifier)
 
     elif args.data == 'kitti':
         from dataloaders.kitti_dataloader import KITTIDataset
@@ -54,6 +61,12 @@ def create_data_loaders(args):
                 modality=args.modality, sparsifier=sparsifier)
         val_dataset = KITTIDataset(valdir, type='val',
             modality=args.modality, sparsifier=sparsifier)
+
+    elif args.data == 'nyudepth2patch':
+        from dataloaders.nyu_dataloader import NYUDatasetPatches
+        if not args.evaluate:
+            train_dataset = NYUDatasetPatches(traindir, 'train',
+                args.crop_size, modality=args.modality, sparsifier=sparsifier)
 
     else:
         raise RuntimeError('Dataset not found.' +

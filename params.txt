@@ -1,0 +1,29 @@
+Patches, cropsize 100, batch 8, resnet50, deconv3, rgbd, 1 samples, 1 epoch -- results:
+RMSE=1.141
+MAE=0.893
+Delta1=0.445
+REL=0.337
+Lg10=nan
+t_GPU=0.009
+output: results/nyudepthv2.sparsifier=uar.samples=1.modality=rgbd.arch=resnet50.decoder=deconv3.criterion=l1.lr=0.01.bs=8.pretrained=True
+
+Patches, cropsize 100, batch 16, resnet50, deconv3, rgbd, 100 samples, 10 epochs -- results: [top]
+RMSE=0.539
+MAE=0.311
+Delta1=0.924
+REL=0.098
+Lg10=nan
+t_GPU=0.008
+output: results/nyudepthv2.sparsifier=uar.samples=100.modality=rgbd.arch=resnet50.decoder=deconv3.criterion=l1.lr=0.01.bs=16.pretrained=True
+
+
+No patches, batch 8, resnet50, deconv3, rgbd, 100 samples, 10 epochs -- results: [bottom]
+RMSE=0.291
+MAE=0.175
+Delta1=0.955
+REL=0.062
+Lg10=0.027
+t_GPU=0.010
+output: results/nyudepthv2.sparsifier=uar.samples=100.modality=rgbd.arch=resnet50.decoder=deconv3.criterion=l1.lr=0.01.bs=8.pretrained=True
+
+
